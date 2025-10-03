@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
         #swagger.method = 'get'
         #swagger.responses[200] = {
             description: 'Successfully retrieved all recipes',
-            schema: { $ref: '#/definitions/Recipe' }
+            schema: { $ref: '#/definitions/RecipeList' }
         }
     */
     return recipesController.getAllRecipes(req, res, next);
@@ -27,7 +27,7 @@ router.post('/', validateRecipe, (req, res, next) => {
         #swagger.description = 'Endpoint to create a new recipe'
         #swagger.path = '/v1/recipes'
         #swagger.method = 'post'
-        #swagger.parameters['obj'] = {
+        #swagger.parameters['RecipeModel'] = {
             in: 'body',
             description: 'Recipe information',
             required: true,
@@ -59,7 +59,7 @@ router.put('/:id', validateRecipe, (req, res, next) => {
         #swagger.summary = 'Update a recipe'
         #swagger.description = 'Endpoint to update an existing recipe'
         #swagger.parameters['id'] = { description: 'Recipe ID' }
-        #swagger.parameters['obj'] = {
+        #swagger.parameters['RecipeModel'] = {
             in: 'body',
             description: 'Recipe information',
             required: true,

@@ -1,7 +1,12 @@
 const validateRecipe = (req, res, next) => {
-    const { title, ingredients, instructions, cookingTime, difficulty, servings } = req.body;
+    const { title, ingredients, instructions, cookingTime, difficulty, servings, userId } = req.body;
 
     const errors = [];
+
+    // UserId validation
+    if (!userId || typeof userId !== 'string' || userId.trim().length < 0) {
+        errors.push('UserId is required and must be a valid string');
+    }
 
     // Title validation
     if (!title || typeof title !== 'string' || title.trim().length < 3) {

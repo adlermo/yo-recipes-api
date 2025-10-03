@@ -5,7 +5,7 @@
     "description": "A REST API for managing recipes",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://yo-recipes-api.onrender.com",
   "basePath": "/api",
   "tags": [
     {
@@ -14,7 +14,6 @@
     }
   ],
   "schemes": [
-    "http",
     "https"
   ],
   "paths": {
@@ -29,7 +28,7 @@
           "200": {
             "description": "Successfully retrieved all recipes",
             "schema": {
-              "$ref": "#/definitions/Recipe"
+              "$ref": "#/definitions/RecipeList"
             }
           },
           "500": {
@@ -45,7 +44,7 @@
         "description": "Endpoint to create a new recipe",
         "parameters": [
           {
-            "name": "obj",
+            "name": "RecipeModel",
             "in": "body",
             "description": "Recipe information",
             "required": true,
@@ -113,7 +112,7 @@
             "description": "Recipe ID"
           },
           {
-            "name": "obj",
+            "name": "RecipeModel",
             "in": "body",
             "description": "Recipe information",
             "required": true,
@@ -164,12 +163,163 @@
           }
         }
       }
+    },
+    "/v1/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "description": "Endpoint to retrieve all users",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all users",
+            "schema": {
+              "$ref": "#/definitions/UserList"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create user",
+        "description": "Endpoint to create a new user",
+        "parameters": [
+          {
+            "name": "UserModel",
+            "in": "body",
+            "description": "User information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a user by ID",
+        "description": "Endpoint to retrieve user data by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user data",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update a user",
+        "description": "Endpoint to update an existing user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          },
+          {
+            "name": "UserModel",
+            "in": "body",
+            "description": "User information",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete a user",
+        "description": "Endpoint to delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "definitions": {
     "Recipe": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "example": "64a7b2f5e4b0c8a1d2f3e4b5"
+        },
         "title": {
           "type": "string",
           "example": "Spaghetti Carbonara"
@@ -205,17 +355,29 @@
         },
         "difficulty": {
           "type": "string",
-          "example": "medium"
+          "example": "easy"
         },
         "servings": {
           "type": "number",
           "example": 4
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2024-06-25T12:00:00Z"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2024-06-20T12:00:00Z"
         }
       }
     },
     "RecipeInput": {
       "type": "object",
       "properties": {
+        "userId": {
+          "type": "string",
+          "example": "64a7b2f5e4b0c8a1d2f3e4b5"
+        },
         "title": {
           "type": "string",
           "example": "Spaghetti Carbonara"
@@ -255,7 +417,7 @@
         },
         "difficulty": {
           "type": "string",
-          "example": "medium"
+          "example": "easy"
         },
         "servings": {
           "type": "number",
@@ -263,6 +425,7 @@
         }
       },
       "required": [
+        "userId",
         "title",
         "ingredients",
         "instructions",
@@ -270,6 +433,160 @@
         "difficulty",
         "servings"
       ]
+    },
+    "RecipeList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "64a7b2f5e4b0c8a1d2f3e4b5"
+          },
+          "title": {
+            "type": "string",
+            "example": "Spaghetti Carbonara"
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item": {
+                  "type": "string",
+                  "example": "spaghetti"
+                },
+                "amount": {
+                  "type": "string",
+                  "example": "400g"
+                }
+              }
+            }
+          },
+          "instructions": {
+            "type": "array",
+            "example": [
+              "Boil the spaghetti in salted water"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "cookingTime": {
+            "type": "number",
+            "example": 30
+          },
+          "difficulty": {
+            "type": "string",
+            "example": "easy"
+          },
+          "servings": {
+            "type": "number",
+            "example": 4
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2024-06-25T12:00:00Z"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2024-06-20T12:00:00Z"
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "64a7b2f5e4b0c8a1d2f3e4b5"
+        },
+        "name": {
+          "type": "string",
+          "example": "John"
+        },
+        "surname": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jdoe@byupathway.edu"
+        },
+        "level": {
+          "type": "string",
+          "example": "amateur"
+        },
+        "age": {
+          "type": "number",
+          "example": 25
+        }
+      }
+    },
+    "UserInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "John"
+        },
+        "surname": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jdoe@byupathway.edu"
+        },
+        "level": {
+          "type": "string",
+          "example": "amateur"
+        },
+        "age": {
+          "type": "number",
+          "example": 25
+        }
+      },
+      "required": [
+        "name",
+        "surname",
+        "email",
+        "level",
+        "age"
+      ]
+    },
+    "UserList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "64a7b2f5e4b0c8a1d2f3e4b5"
+          },
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "jdoe@byupathway.edu"
+          },
+          "level": {
+            "type": "string",
+            "example": "amateur"
+          },
+          "age": {
+            "type": "number",
+            "example": 25
+          }
+        }
+      }
     }
   }
 }
