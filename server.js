@@ -21,6 +21,9 @@ app.use((err, req, res, next) => {
     });
 });
 
+// Google OAuth configuration
+app.use(require('./src/config/oauth'));
+
 // Routes
 const routes = require('./src/routes');
 
