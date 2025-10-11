@@ -6,7 +6,7 @@ const doc = {
         description: 'A REST API for managing recipes',
         version: '1.0.0'
     },
-    host: 'https://yo-recipes-api.onrender.com',
+    host: 'yo-recipes-api.onrender.com',
     basePath: '/api',
     schemes: ['https'],
     tags: [
