@@ -43,8 +43,8 @@ app.get('/', (req, res) => {
 
 app.use(oauth);
 
-app.use('/api', authMiddleware, routes);
-app.use('/api-docs', authMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api', routes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/home', authMiddleware, (req, res) => {
     const { givenName } = req.user.name;
 
