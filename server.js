@@ -5,6 +5,7 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const { connectToDatabase } = require('./src/config/mongodb');
+
 const app = express();
 
 // Google OAuth
@@ -44,8 +45,7 @@ app.use(oauth);
 
 app.use('/api', authMiddleware, routes);
 app.use('/api-docs', authMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.get('/profile', authMiddleware, (req, res) => {
+app.get('/home', authMiddleware, (req, res) => {
     const { givenName } = req.user.name;
 
     res.send(

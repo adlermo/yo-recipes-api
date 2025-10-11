@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const recipesController = require('../controllers/recipesController');
 const validateRecipe = require('../middleware/validateRecipe');
+const authMiddleware = require('../middleware/auth');
 
 // GET all recipes
 router.get('/', (req, res, next) => {
@@ -20,7 +21,7 @@ router.get('/', (req, res, next) => {
 });
 
 // POST new recipe
-router.post('/', validateRecipe, (req, res, next) => {
+router.post('/', authMiddleware, validateRecipe, (req, res, next) => {
     /* 
         #swagger.tags = ['Recipes']
         #swagger.summary = 'Create a new recipe'
@@ -53,7 +54,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 // PUT update recipe
-router.put('/:id', validateRecipe, (req, res, next) => {
+router.put('/:id', authMiddleware, validateRecipe, (req, res, next) => {
     /* 
         #swagger.tags = ['Recipes']
         #swagger.summary = 'Update a recipe'
@@ -70,7 +71,7 @@ router.put('/:id', validateRecipe, (req, res, next) => {
 });
 
 // DELETE recipe
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', authMiddleware, (req, res, next) => {
     /* 
         #swagger.tags = ['Recipes']
         #swagger.summary = 'Delete a recipe'

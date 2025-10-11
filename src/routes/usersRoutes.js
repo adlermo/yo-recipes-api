@@ -1,6 +1,7 @@
 const express = require('express');
 const validateUser = require('../middleware/validateUser');
 const usersController = require('../controllers/usersController');
+const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router.post('/', validateUser, (req, res, next) => {
 });
 
 // GET single user by ID
-router.get('/:id', (req, res, next) => {
+router.get('/:id', authMiddleware, (req, res, next) => {
     /* 
         #swagger.tags = ['Users']
         #swagger.summary = 'Get a user by ID'
@@ -54,7 +55,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 // PUT update user data
-router.put('/:id', validateUser, (req, res, next) => {
+router.put('/:id', authMiddleware, validateUser, (req, res, next) => {
     /* 
         #swagger.tags = ['Users']
         #swagger.summary = 'Update a user'
@@ -71,7 +72,7 @@ router.put('/:id', validateUser, (req, res, next) => {
 });
 
 // DELETE user
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', authMiddleware, (req, res, next) => {
     /* 
         #swagger.tags = ['Users']
         #swagger.summary = 'Delete a user'
